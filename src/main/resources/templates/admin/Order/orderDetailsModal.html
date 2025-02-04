@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details</title>
+</head>
+<body>
+<div class="modal-header">
+    <h5 class="modal-title" id="orderDetailModalLabel">Order Details</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <h5>Order ID: <span th:text="${orderId}"></span></h5>
+    <div th:if="${customer != null}">
+        <h2>Thông tin khách hàng</h2>
+        <p>Họ và tên: <span th:text="${customer.surname + ' ' + customer.name}"></span></p>
+        <p>Email: <span th:text="${customerEmail}"></span></p>
+        <p>Số điện thoại: <span th:text="${customer. sdt}"></span></p>
+        <p>Địa chỉ: <span th:text="${customer.address}"></span></p>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+<!--            <th>Hình ảnh</th>-->
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng giá sản phẩm</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detail : ${orderDetails}">
+            <td th:text="${detail.product != null ? detail.product.name : 'N/A'}"></td>
+            <td>
+                <input type="number" th:value="${detail.quantity}" th:attr="data-productid=${detail.product.id}, data-orderid=${orderId}" class="quantity-input"/>
+            </td>
+            <td th:text="${detail.price}"></td>
+            <td th:text="${detail.productTotal}"></td>
+
+        </tr>
+        <tr th:if="${#lists.isEmpty(orderDetails)}">
+            <td colspan="3">No details available</td>
+        </tr>
+        </tbody>
+    </table>
+    <h5>Tổng giá tất cả sản phẩm: <span th:text="${totalPrice}"></span> VNĐ</h5>
+</div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.quantity-input').on('change', function() {
+            var quantity = $(this).val();
+            var productId = $(this).data('productid');
+            var orderId = $(this).data('orderid');
+
+            $.ajax({
+                url: '/admin/order/' + orderId + '/details/update',
+                type: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    alert('Quantity updated successfully!');
+                    // Bạn có thể cập nhật lại tổng giá sản phẩm ở đây nếu cần
+                },
+                error: function(xhr) {
+                    alert('Failed to update quantity. Please try again.');
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Examples</a></li>
+                <li class="active">Plant Attributes List</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Danh sách thuộc tính cây</h3>
+                            </div>
+
+                            <div class="box-body">
+                                <table id="example1" class="table table-bordered table-striped dataTable">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Chiều Cao</th>
+                                        <th>Độ Khó</th>
+                                        <th>Yêu Cầu Ánh Sáng</th>
+                                        <th>Nhu Cầu Nước</th>
+                                        <th>Tùy Chọn</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="attribute : ${plantAttributes}">
+                                        <td th:text="${attribute.id}"></td>
+                                        <td th:text="${attribute.product.name}"></td>
+                                        <td th:text="${attribute.height}"></td>
+                                        <td th:text="${attribute.difficulty}"></td>
+                                        <td th:text="${attribute.lightRequirement}"></td>
+                                        <td th:text="${attribute.waterRequirement}"></td>
+                                        <td>
+                                            <a th:href="@{/admin/plant-attributes/edit/{id}(id=${attribute.id})}"
+                                               class="btn btn-success"><i class="bi bi-pencil-square"></i> Sửa</a>
+                                            <a th:href="@{/admin/plant-attributes/delete/{id}(id=${attribute.id})}"
+                                               class="delete-btn btn btn-danger"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa thuộc tính này?');"><i
+                                                    class="bi bi-trash"></i> Xóa</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<!-- Include jQuery and DataTables JS and CSS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+
+<script>
+    $(document).ready(function() {
+        $('#example1').DataTable({
+            "paging": true,        // Bật phân trang
+            "searching": true,     // Bật chức năng tìm kiếm
+            "lengthChange": true,  // Cho phép thay đổi số lượng mục hiển thị
+            "info": true           // Hiển thị thông tin tổng số mục
+        });
+    });
+</script>
+</body>
+</html>

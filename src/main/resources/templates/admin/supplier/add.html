@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Thêm nhà cung cấp
+                <small>Bắt đầu từ đây</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Ví dụ</a></li>
+                <li class="active">Thêm nhà cung cấp</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Thêm nhà cung cấp mới</h3>
+                </div>
+                <div class ="col-md-6">
+                    <form th:action="@{/admin/supplier/add}" th:object="${supplier}" method="post">
+                        <div class="box-body">
+                            <div th:if="${idnull != null}" class="alert alert-danger" th:text="${idnull}"></div>
+                            <div th:if="${namenull != null}" class="alert alert-danger" th:text="${namenull}"></div>
+                            <div th:if="${sdtNull != null}" class="alert alert-danger" th:text="${sdtNull}"></div>
+                            <div th:if="${addressNull != null}" class="alert alert-danger" th:text="${addressNull}"></div>
+                            <div th:if="${success != null}" class="alert alert-success" th:text="${success}"></div>
+
+                            <div class="form-group" th:classappend="${#fields.hasErrors('id')} ? 'has-error' : ''">
+                                <label for="supplierId">Mã nhà cung cấp</label>
+                                <input type="text" class="form-control" id="supplierId" name="id"
+                                       placeholder="Nhập mã nhà cung cấp" th:field="*{id}">
+                                <span class="help-block" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
+                            </div>
+                            <div class="form-group" th:classappend="${#fields.hasErrors('Name')} ? 'has-error' : ''">
+                                <label for="supplierName">Tên nhà cung cấp</label>
+                                <input type="text" class="form-control" id="supplierName" name="Name" placeholder="Nhập tên nhà cung cấp" th:field="*{Name}">
+                                <span class="help-block" th:if="${#fields.hasErrors('Name')}" th:errors="*{Name}"></span>
+                            </div>
+
+                            <div class="form-group" th:classappend="${#fields.hasErrors('sdt')} ? 'has-error' : ''">
+                                <label for="supplierSdt">Số điện thoại</label>
+                                <input type="text" class="form-control" id="supplierSdt" name="sdt"
+                                       placeholder="Nhập số điện thoại" th:field="*{sdt}">
+                                <span class="help-block" th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}"></span>
+                            </div>
+                            <div class="form-group" th:classappend="${#fields.hasErrors('address')} ? 'has-error' : ''">
+                                <label for="supplierAddress">Địa chỉ</label>
+                                <input type="text" class="form-control" id="supplierAddress" name="address"
+                                       placeholder="Nhập địa chỉ" th:field="*{address}">
+                                <span class="help-block" th:if="${#fields.hasErrors('address')}"
+                                      th:errors="*{address}"></span>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+
+</div>
+
+</body>
+</html>

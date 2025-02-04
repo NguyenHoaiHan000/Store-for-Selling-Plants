@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Examples</a></li>
+                <li class="active">Product List</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Phần tìm kiếm theo ngày -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Lọc Theo Ngày</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="#" th:action="@{/admin/Statistic}" method="get">
+                                    <div class="form-group">
+                                        <label for="startDate">Ngày Bắt Đầu:</label>
+                                        <input type="date" id="startDate" name="startDate" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">Ngày Kết Thúc:</label>
+                                        <input type="date" id="endDate" name="endDate" class="form-control" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Tìm Kiếm</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bảng danh sách sản phẩm, chỉ hiển thị nếu có dữ liệu -->
+                    <div class="col-md-8 mb-4" th:if="${statistics.size() > 0}">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Danh Sách Sản Phẩm</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped dataTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Tên Sản Phẩm</th>
+                                        <th>Giá Nhập</th>
+                                        <th>Giá Bán</th>
+                                        <th>Số Lượng Nhập Vào</th>
+                                        <th>Số Lượng Bán Ra</th>
+                                        <th>Số Lượng Tồn Kho</th>
+                                        <th>Thành Tiền Nhập Vào</th>
+                                        <th>Thành Tiền Bán Ra</th>
+                                        <th>Doanh Thu</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="statistic : ${statistics}">
+                                        <td th:text="${statistic.tenSanPham}"></td>
+                                        <td th:text="${#numbers.formatDecimal(statistic.giaNhap, 0, 0) + ' VNĐ'}"></td>
+                                        <td th:text="${#numbers.formatDecimal(statistic.giaBan, 0, 0) + ' VNĐ'}"></td>
+                                        <td th:text="${statistic.soLuongNhap}"></td>
+                                        <td th:text="${statistic.soLuongBan}"></td>
+                                        <td th:text="${statistic.soLuongTon}"></td>
+                                        <td th:text="${#numbers.formatDecimal(statistic.thanhTienNhap, 0, 0) + ' VNĐ'}"></td>
+                                        <td th:text="${#numbers.formatDecimal(statistic.thanhTienBan, 0, 0) + ' VNĐ'}"></td>
+                                        <td th:text="${#numbers.formatDecimal(statistic.doanhThu, 0, 0) + ' VNĐ'}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bảng tổng hợp, chỉ hiển thị nếu có dữ liệu -->
+                    <div class="col-md-12" th:if="${totalProductsImported != null && totalProductsSold != null && totalMoneyImported != null && totalMoneySold != null && totalInventory != null && totalRevenue != null}">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Tổng Hợp</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-striped dataTable">
+                                    <thead>
+                                    <tr>
+<!--                                        <th>Tổng số sản phẩm nhập vào</th>-->
+                                        <th>Tổng số sản phẩm bán ra</th>
+                                        <th>Tổng số tiền nhập vào</th>
+                                        <th>Tổng số tiền bán ra</th>
+                                        <th>Tổng số lượng tồn kho</th>
+                                        <th>Tổng số doanh thu</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+<!--                                        <td th:text="${totalProductsImported}"></td>-->
+                                        <td th:text="${totalProductsSold}"></td>
+                                        <td th:text="${#numbers.formatDecimal(totalMoneyImported, 0, 0) + ' VNĐ'}"></td>
+                                        <td th:text="${#numbers.formatDecimal(totalMoneySold, 0, 0) + ' VNĐ'}"></td>
+                                        <td th:text="${totalInventory}"></td>
+                                        <td th:text="${#numbers.formatDecimal(totalRevenue, 0, 0) + ' VNĐ'}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<script>
+
+</script>
+<div th:replace="admin/fragments/script :: script"></div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<div xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="script">
+    <script th:src="@{/fe/js/jquery.min.js}"></script>
+    <script th:src="@{/fe/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/fe/js/jquery.hoverIntent.min.js}"></script>
+    <script th:src="@{/fe/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/fe/js/superfish.min.js}"></script>
+    <script th:src="@{/fe/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/fe/js/bootstrap-input-spinner.js}"></script>
+    <script th:src="@{/fe/js/jquery.plugin.min.js}"></script>
+    <script th:src="@{/fe/js/jquery.magnific-popup.min.js}"></script>
+    <script th:src="@{/fe/js/jquery.countdown.min.js}"></script>
+    <!-- Main JS File -->
+    <script th:src="@{/fe/js/main.js}"></script>
+    <script th:src="@{/fe/js/demos/demo-4.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          document.querySelectorAll('.product-price,.price-col').forEach(function(element) {
+              let value = parseFloat(element.innerText);
+              if (!isNaN(value)) {
+                  // Định dạng số với dấu phân cách hàng nghìn và số thập phân, thêm "₫" vào cuối
+                  element.innerText = value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+              }
+          });
+      });
+
+
+
+    </script>
+</div>

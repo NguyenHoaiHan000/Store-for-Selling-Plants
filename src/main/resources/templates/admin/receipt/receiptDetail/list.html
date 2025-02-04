@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Chi tiết phiếu nhập
+                <small>Bắt đầu từ đây</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Ví dụ</a></li>
+                <li class="active">Chi tiết phiếu nhập</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Danh sách chi tiết phiếu nhập</h3>
+                </div>
+
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Mã chi tiết</th>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá nhập</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Thymeleaf loop to iterate over receipt details -->
+                        <tr th:each="detail : ${receiptDetails}">
+                            <td th:text="${detail.id.receipt} + '-' + ${detail.id.product}">Mã chi tiết</td>
+                            <td th:text="${detail.product.name}">Sản phẩm</td>
+                            <td th:text="${detail.quantity}">Số lượng</td>
+                            <td th:text="${#numbers.formatDecimal(detail.price, 0, 0) + ' VNĐ'}">Giá nhập</td>
+                            <td th:text="${#numbers.formatDecimal(detail.totalCost, 0, 0) + ' VNĐ'}">Tổng giá</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4">Tổng cộng</td>
+                            <td th:text="${#numbers.formatDecimal(totalCost,0,0) + ' VNĐ'}">Tổng giá</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <!-- Nút quay lại -->
+                    <a th:href="@{/admin/receipt}" class="btn btn-default">Quay lại</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<script>
+    function confirmDelete() {
+        return confirm("Bạn có chắc chắn muốn xóa phiếu nhập này không?");
+    }
+</script>
+
+<div th:replace="admin/fragments/script :: script"></div>
+
+</body>
+</html>

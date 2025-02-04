@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Thêm phiếu nhập mới
+                <small>Điền thông tin sản phẩm</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Quản lý phiếu nhập</a></li>
+                <li class="active">Thêm phiếu nhập</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-body">
+                            <!-- Form thêm phiếu nhập -->
+                            <form th:action="@{/admin/receipt/save}" method="post" id="receiptForm">
+
+                                <div class="form-group">
+                                    <label for="supplier">Nhà cung cấp:</label>
+                                    <select class="form-control" id="supplier" name="receipt.supplier.id" required style="width:190px;">
+                                        <option value="">Chọn nhà cung cấp</option>
+                                        <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.Name}"></option>
+                                    </select>
+                                </div>
+
+                                <!-- Danh sách sản phẩm nhập -->
+                                <div class="form-group">
+                                    <label for="tableSanPham">Danh sách sản phẩm:</label>
+                                    <table id="tableSanPham" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Mã sản phẩm</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Số lượng</th>
+                                            <th>Giá nhập (VNĐ)</th>
+                                            <th>Xóa</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- Dòng sản phẩm sẽ được thêm bằng JavaScript -->
+                                        </tbody>
+                                    </table>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalThemSanPham">
+                                        Thêm sản phẩm
+                                    </button>
+                                    <button type="submit" class="btn btn-success">Lưu phiếu nhập</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<!-- Modal thêm sản phẩm -->
+<div class="modal fade" id="modalThemSanPham" tabindex="-1" role="dialog" aria-labelledby="modalThemSanPhamLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalThemSanPhamLabel">Chọn sản phẩm và nhập thông tin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="themSanPhamForm">
+                    <div class="form-group">
+                        <label for="selectSanPham">Chọn sản phẩm:</label>
+                        <select class="form-control" id="selectSanPham" name="productId" >
+                            <!-- Thymeleaf loop for product options -->
+                            <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.Name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSoLuong">Số lượng:</label>
+                        <input type="number" class="form-control" id="inputSoLuong" name="quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputGiaNhap">Giá nhập (VNĐ):</label>
+                        <input type="number" class="form-control" id="inputGiaNhap" name="price">
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="themSanPham()">Thêm sản phẩm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+
+
+<!-- Script -->
+
+<script>
+    function themSanPham() {
+        var productId = document.getElementById('selectSanPham').value;
+        var productName = document.getElementById('selectSanPham').options[document.getElementById('selectSanPham').selectedIndex].text;
+        var soLuong = document.getElementById('inputSoLuong').value;
+        var giaNhap = document.getElementById('inputGiaNhap').value;
+
+        // Kiểm tra các giá trị nhập vào
+        if (!productId || !soLuong || !giaNhap) {
+            alert('Vui lòng nhập đầy đủ thông tin sản phẩm.');
+            return;
+        }
+
+        // Tạo các phần tử input ẩn để lưu thông tin sản phẩm vào form
+        var hiddenProductId = '<input type="hidden" name="productId" value="' + productId + '">';
+        var hiddenQuantity = '<input type="hidden" name="quantity" value="' + soLuong + '">';
+        var hiddenPrice = '<input type="hidden" name="price" value="' + giaNhap + '">';
+
+        // Thêm vào bảng sản phẩm
+        var tableBody = document.getElementById('tableSanPham').getElementsByTagName('tbody')[0];
+        var newRow = document.createElement('tr');
+        newRow.innerHTML = '<td>' + productId + '</td><td>' + productName + '</td><td>' + soLuong + '</td><td>' + giaNhap + '</td><td><button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this)">Xóa</button></td>';
+
+        // Thêm các input ẩn vào dòng sản phẩm
+        newRow.innerHTML += hiddenProductId + hiddenQuantity + hiddenPrice;
+
+        // Thêm dòng sản phẩm vào bảng
+        tableBody.appendChild(newRow);
+
+        // Reset các trường đầu vào trong modal
+        document.getElementById('selectSanPham').value = '';
+        document.getElementById('inputSoLuong').value = '';
+        document.getElementById('inputGiaNhap').value = '';
+
+        // Cập nhật lại danh sách sản phẩm
+        updateProductList();
+
+        // Đóng modal
+
+    }
+
+
+    function removeRow(button) {
+        // Xóa dòng sản phẩm
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+
+        // Cập nhật lại danh sách sản phẩm
+        updateProductList();
+    }
+
+    function updateProductList() {
+        // Lấy danh sách sản phẩm đã chọn
+        var selectedProducts = [];
+        var rows = document.getElementById('tableSanPham').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        for (var i = 0; i < rows.length; i++) {
+            var productId = rows[i].getElementsByTagName('td')[0].innerText;
+            selectedProducts.push(productId);
+        }
+
+        // Lấy tất cả các tùy chọn sản phẩm
+        var options = document.getElementById('selectSanPham').getElementsByTagName('option');
+
+        // Hiển thị lại tất cả các tùy chọn
+        for (var j = 0; j < options.length; j++) {
+            options[j].style.display = '';
+        }
+
+        // Ẩn các sản phẩm đã chọn
+        for (var k = 0; k < selectedProducts.length; k++) {
+            for (var l = 0; l < options.length; l++) {
+                if (options[l].value === selectedProducts[k]) {
+                    options[l].style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // Gọi hàm cập nhật danh sách sản phẩm khi mở modal
+    $('#modalThemSanPham').on('show.bs.modal', function () {
+        updateProductList();
+    });
+
+
+</script>
+
+<div th:replace="admin/fragments/script :: script"></div>
+</body>
+</html>

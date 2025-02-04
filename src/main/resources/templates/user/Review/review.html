@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from portotheme.com/html/molla/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 19 Jan 2024 02:54:34 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+<meta name="_csrf" content="${_csrf.token}">
+<head th:replace="layout/head :: head"/>
+</head>
+
+<body>
+<div class="page-wrapper">
+    <head th:replace="layout/header :: header"/>
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                </ol>
+            </div>
+        </nav>
+        <div class="page-content">
+            <div class="cart">
+                <div class="container">
+                    <div class="row">
+                        <aside class="col-md-4 col-lg-3">
+                            <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab"
+                                       href="/user/order/history" role="tab" aria-controls="tab-orders"
+                                       aria-selected="false">Order History</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-account-link" data-toggle="tab"
+                                       href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="true">Account
+                                        Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Sign Out</a>
+                                </li>
+                            </ul>
+                        </aside>
+                        <div class="col-lg-9">
+                            <div class="col-md-8">
+                                <ul class="nav nav-tabs nav-tabs-bg" id="tabs-1" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tab-1-tab" data-toggle="tab" href="#tab-1" role="tab"
+                                           aria-controls="tab-1" aria-selected="false">Đánh giá sản phẩm</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                            <!-- Danh sách đánh giá -->
+                            <form th:action="@{/review}" method="post" id="reviewForm">
+                                <div class="products mb-3 ">
+                                    <div class="row ">
+                                        <div class = "col-6 col-md-4 col-lg-3">
+                                        <input type="hidden" name="orderId" th:value="${order.id}">
+                                        <div th:each="detail : ${order.orderDetails}">
+                                            <div >
+                                                <div class="product product-7 text-center">
+                                                    <figure class="product-media">
+                                                        <a th:href="@{/product/{id}(id=${detail.product.id})}">
+                                                            <img th:src="@{${detail.product.image}}" alt="Product image"
+                                                                 class="product-image">
+                                                        </a>
+                                                        <div class="product-action-vertical">
+                                                            <a href="#"
+                                                               class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                                            <a href="popup/quickView.html"
+                                                               class="btn-product-icon btn-quickview"
+                                                               title="Quick view"><span>Quick view</span></a>
+                                                            <a href="#" class="btn-product-icon btn-compare"
+                                                               title="Compare"><span>Compare</span></a>
+                                                        </div><!-- End .product-action-vertical -->
+                                                        <div class="product-action">
+                                                            <a href="#"
+                                                               class="btn-product btn-cart"><span>add to cart</span></a>
+                                                        </div><!-- End .product-action -->
+                                                    </figure><!-- End .product-media -->
+                                                    <div class="product-body">
+                                                        <div class="product-cat">
+                                                            <a th:href="@{/category/{id}(id=${detail.product.category.id})}">Dresses</a>
+                                                        </div><!-- End .product-cat -->
+                                                        <h3 class="product-title"><a
+                                                                th:href="@{/product/{id}(id=${detail.product.id})}"
+                                                                th:text="${detail.product.name}">Dark yellow lace cut
+                                                            out swing dress</a></h3><!-- End .product-title -->
+                                                        <div class="ratings-container" th:data-product-id="${detail.product.id}">
+                                                            <div >
+                                                                <!-- Các sao đánh giá -->
+                                                                <span class="star" data-value="1" th:classappend="${productReviews[detail.product.id] != null && productReviews[detail.product.id].rating >= 1} ? 'selected' : ''"
+                                                                      onclick="submitRating(1, this)">★</span>
+                                                                <span class="star" data-value="2" th:classappend="${productReviews[detail.product.id] != null && productReviews[detail.product.id].rating >= 2} ? 'selected' : ''"
+                                                                      onclick="submitRating(2, this)">★</span>
+                                                                <span class="star" data-value="3" th:classappend="${productReviews[detail.product.id] != null && productReviews[detail.product.id].rating >= 3} ? 'selected' : ''"
+                                                                      onclick="submitRating(3, this)">★</span>
+                                                                <span class="star" data-value="4" th:classappend="${productReviews[detail.product.id] != null && productReviews[detail.product.id].rating >= 4} ? 'selected' : ''"
+                                                                      onclick="submitRating(4, this)">★</span>
+                                                                <span class="star" data-value="5" th:classappend="${productReviews[detail.product.id] != null && productReviews[detail.product.id].rating >= 5} ? 'selected' : ''"
+                                                                      onclick="submitRating(5, this)">★</span>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div><!-- End .product-body -->
+                                                </div><!-- End .product -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+<footer th:replace="layout/footer :: footer"/>
+
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container mobile-menu-light">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+                   required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab"
+                   aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="mobile-cats-link" data-toggle="tab" href="#mobile-cats-tab" role="tab"
+                   aria-controls="mobile-cats-tab" aria-selected="false">Categories</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel"
+                 aria-labelledby="mobile-menu-link">
+                <nav class="mobile-nav">
+                    <ul class="mobile-menu">
+
+                    </ul>
+                </nav><!-- End .mobile-nav -->
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="mobile-cats-tab" role="tabpanel" aria-labelledby="mobile-cats-link">
+                <nav class="mobile-cats-nav">
+                    <ul class="mobile-cats-menu">
+                        <li><a class="mobile-cats-lead" href="#">Daily offers</a></li>
+                        <li><a class="mobile-cats-lead" href="#">Gift Ideas</a></li>
+                        <li><a href="#">Beds</a></li>
+                        <li><a href="#">Lighting</a></li>
+                        <li><a href="#">Sofas & Sleeper sofas</a></li>
+                        <li><a href="#">Storage</a></li>
+                        <li><a href="#">Armchairs & Chaises</a></li>
+                        <li><a href="#">Decoration </a></li>
+                        <li><a href="#">Kitchen Cabinets</a></li>
+                        <li><a href="#">Coffee & Tables</a></li>
+                        <li><a href="#">Outdoor Furniture </a></li>
+                    </ul><!-- End .mobile-cats-menu -->
+                </nav><!-- End .mobile-cats-nav -->
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<!-- Sign in / Register Modal -->
+<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <div class="form-tab">
+                        <ul class="nav nav-pills nav-fill nav-border-anim" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
+                                   aria-controls="signin" aria-selected="true">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab"
+                                   aria-controls="register" aria-selected="false">Register</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                 aria-labelledby="signin-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="singin-email">Username or email address *</label>
+                                        <input type="text" class="form-control" id="singin-email" name="singin-email"
+                                               required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="singin-password">Password *</label>
+                                        <input type="password" class="form-control" id="singin-password"
+                                               name="singin-password" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>LOG IN</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="signin-remember">
+                                            <label class="custom-control-label" for="signin-remember">Remember
+                                                Me</label>
+                                        </div><!-- End .custom-checkbox -->
+
+                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .form-choice -->
+                            </div><!-- .End .tab-pane -->
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="register-email">Your email address *</label>
+                                        <input type="email" class="form-control" id="register-email"
+                                               name="register-email" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="register-password">Password *</label>
+                                        <input type="password" class="form-control" id="register-password"
+                                               name="register-password" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SIGN UP</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="register-policy"
+                                                   required>
+                                            <label class="custom-control-label" for="register-policy">I agree to the <a
+                                                    href="#">privacy policy</a> *</label>
+                                        </div><!-- End .custom-checkbox -->
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login  btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .form-choice -->
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+<script th:inline="javascript">
+    function toggleDetails(orderId) {
+        const detailsRow = document.getElementById(`detailsRow_${orderId}`);
+        if (detailsRow.style.display === "none" || detailsRow.style.display === "") {
+            detailsRow.style.display = "table-row";
+        } else {
+            detailsRow.style.display = "none";
+        }
+    }
+<!-- đánh giá-->
+function submitRating(rating, starElement) {
+    // Lấy element cha chứa data-product-id
+    const container = starElement.closest('.ratings-container');
+    const productId = container.getAttribute('data-product-id');
+
+    console.log(`Submitting rating ${rating} for product ${productId}`);
+
+    fetch('/user/review', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            'productId': productId,
+            'rating': rating
+        })
+    }).then(response => {
+        if (response.ok) {
+            console.log(`Review submitted successfully for product ${productId}`);
+            updateStars(rating, productId);
+        } else {
+            console.error('Failed to submit review. Status:', response.status);
+        }
+    }).catch(error => console.error('Error:', error));
+}
+
+function updateStars(rating, productId) {
+    console.log(`Updating stars for product ${productId} with rating ${rating}`);
+
+    // Tìm tất cả các sao cho sản phẩm cụ thể
+    const stars = document.querySelectorAll(`.ratings-container[data-product-id='${productId}'] .star`);
+
+    stars.forEach(star => {
+        if (parseInt(star.getAttribute('data-value')) <= rating) {
+            star.classList.add('selected');
+        } else {
+            star.classList.remove('selected');
+        }
+    });
+
+    // Cập nhật số lượng đánh giá (nếu cần)
+    // Bạn có thể thêm mã để cập nhật số lượng đánh giá nếu dữ liệu phản hồi từ server bao gồm thông tin đó
+}
+
+
+
+</script>
+
+
+<!-- Plugins JS File -->
+<div th:replace="layout/script :: script"></div>
+</body>
+</html>

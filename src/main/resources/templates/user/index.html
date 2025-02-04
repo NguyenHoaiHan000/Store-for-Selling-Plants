@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+<head th:replace="layout/head :: head"/>
+
+<body>
+<div class="page-wrapper">
+    <head th:replace="layout/header :: header"/>
+
+    <main class="main">
+
+        <div class="mb-4"></div><!-- End .mb-4 -->
+
+        <div class="mb-3"></div><!-- End .mb-5 -->
+
+        <div class="text-center bg1 box" style="margin-bottom: 15px;">
+
+            <h1 class="font30"><i class="i-hand"></i><span class="full text-center pb-3">Web cây cảnh và cá cảnh </span>
+            </h1>
+
+            <div class="clearfix h20"></div>
+
+
+        </div>
+        <div class="bg-light pt-5 pb-6">
+            <div class="container new-arrivals">
+                <div class="container top-products">
+                    <div class="heading heading-flex mb-3">
+                        <div class="heading-left">
+                            <h2 class="title">Top Products</h2><!-- End .title -->
+                        </div><!-- End .heading-left -->
+                    </div><!-- End .heading -->
+
+                    <div class="products">
+                        <div class="row justify-content-center">
+                            <!-- Lặp qua danh sách sản phẩm top -->
+                            <div class="col-6 col-md-4 col-lg-3 col-xl-2" th:each="product : ${topSellingProducts}">
+                                <div class="product product-2">
+                                    <figure class="product-media">
+                                        <a
+                                                th:href="@{/product/{id}(id=${product.id})}">
+                                            <img style="padding: 15px; background-color: white;"
+                                                 th:src="@{${product.image}}" alt="Product image" class="product-image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist"
+                                               title="Add to wishlist"></a>
+                                        </div><!-- End .product-action -->
+
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"
+                                               title="Add to cart"><span>add to cart</span></a>
+                                            <a href="popup/quickView.html" class="btn-product btn-quickview"
+                                               title="Quick view"><span>quick view</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a th:href="@{/category/{id}(id=${product.category.id})}"
+                                               th:text="${product.category.name}"></a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title">
+                                            <a th:href="@{/product/{id}(id=${product.id})}"
+                                               th:text="${product.name}"></a>
+                                        </h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            <span th:text="${product.price}"></span>
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val"
+                                                     th:style="'width: ' + (${product.averageRating} * 20) + '%'"></div>
+                                                <!-- End .ratings-val -->
+                                            </div>
+                                            <span th:text="${product.reviewCount} + ' Reviews'"></span>
+                                        </div><!-- End .rating-container -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+                            </div><!-- End .col-6 col-md-4 col-lg-3 col-xl-2 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .products -->
+                </div><!-- End .container -->
+
+
+            </div><!-- End .container -->
+        </div>
+        <div class="mb-6"></div><!-- End .mb-6 -->
+        <div class="container">
+            <hr class="mb-0">
+
+        </div><!-- End .container -->
+
+        <div class="text-center box box-prod"  style="margin-top: 15px;  flex-direction: column; justify-content: center; align-items: center;">
+            <div class="mb-5">
+                <h2 class="tit-box cl_xanh6" style="margin-bottom: 30px;">
+                    sản phẩm gợi ý cho bạn
+                </h2>
+            </div><!-- End .mb-5 -->
+        </div>
+        <div class="container for-you">
+            <div class="heading heading-flex mb-3">
+                <div class="heading-left">
+                </div><!-- End .heading-left -->
+
+            </div><!-- End .heading -->
+            <div class="products">
+                <div class="row justify-content-center">
+                    <div class="col-6 col-md-4 col-lg-3 col-xl-5col" th:each="product : ${recommendedProducts}">
+                        <div class="product product-2">
+                            <figure class="product-media">
+                                <a th:href="@{/product/{id}(id=${product.id})}">
+                                    <img style="padding: 20px; background-color: white;"
+                                         th:src="@{${product.image}}" alt="Product image" class="product-image">
+                                </a>
+
+                                <div class="product-action-vertical">
+                                    <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                                </div><!-- End .product-action -->
+
+                                <div class="product-action">
+                                    <a href="#" class="btn-product btn-cart"
+                                       title="Add to cart"><span>add to cart</span></a>
+                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                </div><!-- End .product-action -->
+                            </figure><!-- End .product-media -->
+
+                            <div class="product-body">
+                                <div class="product-cat">
+                                    <a th:href="@{/category/{id}(id=${product.category.id})}"
+                                       th:text="${product.category.name}"></a>
+                                </div><!-- End .product-cat -->
+                                <h3 class="product-title">
+                                    <a th:href="@{/product/{id}(id=${product.id})}" th:text="${product.name}"></a>
+                                </h3><!-- End .product-title -->
+                                <div class="product-price">
+                                    <span th:text="${product.price}"></span>
+                                </div>
+                                <div class="ratings-container">
+                                    <div class="ratings">
+                                        <div class="ratings-val"
+                                             th:style="'width: ' + (${product.averageRating} * 20) + '%'"></div>
+                                        <!-- End .ratings-val -->
+                                    </div>
+                                    <span th:text="${product.reviewCount} + ' Reviews'"></span>
+                                </div><!-- End .rating-container -->
+
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                    </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .products -->
+
+        </div><!-- End .container -->
+
+
+        <div class="mb-4"></div><!-- End .mb-4 -->
+
+        <div class="container">
+            <hr class="mb-0">
+        </div><!-- End .container -->
+
+        <div class="icon-boxes-container bg-transparent">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="icon-box icon-box-side">
+                                <span class="icon-box-icon text-dark">
+                                    <i class="icon-rocket"></i>
+                                </span>
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
+                                <p>Orders $50 or more</p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="icon-box icon-box-side">
+                                <span class="icon-box-icon text-dark">
+                                    <i class="icon-rotate-left"></i>
+                                </span>
+
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
+                                <p>Within 30 days</p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="icon-box icon-box-side">
+                                <span class="icon-box-icon text-dark">
+                                    <i class="icon-info-circle"></i>
+                                </span>
+
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
+                                <p>when you sign up</p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="icon-box icon-box-side">
+                                <span class="icon-box-icon text-dark">
+                                    <i class="icon-life-ring"></i>
+                                </span>
+
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">We Support</h3><!-- End .icon-box-title -->
+                                <p>24/7 amazing services</p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .icon-boxes-container -->
+    </main><!-- End .main -->
+
+    <footer th:replace="layout/footer :: footer"/>
+
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container mobile-menu-light">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+                   required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab"
+                   aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="mobile-cats-link" data-toggle="tab" href="#mobile-cats-tab" role="tab"
+                   aria-controls="mobile-cats-tab" aria-selected="false">Categories</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel"
+                 aria-labelledby="mobile-menu-link">
+                <nav class="mobile-nav">
+                    <ul class="mobile-menu">
+                        <li class="active">
+                            <a href="index.html">Home</a>
+                        </li>
+                    </ul>
+                </nav><!-- End .mobile-nav -->
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="mobile-cats-tab" role="tabpanel" aria-labelledby="mobile-cats-link">
+                <nav class="mobile-cats-nav">
+                    <ul class="mobile-cats-menu">
+                        <li><a class="mobile-cats-lead" href="#">Daily offers</a></li>
+                        <li><a class="mobile-cats-lead" href="#">Gift Ideas</a></li>
+                        <li><a href="#">Beds</a></li>
+                        <li><a href="#">Lighting</a></li>
+                        <li><a href="#">Sofas & Sleeper sofas</a></li>
+                        <li><a href="#">Storage</a></li>
+                        <li><a href="#">Armchairs & Chaises</a></li>
+                        <li><a href="#">Decoration </a></li>
+                        <li><a href="#">Kitchen Cabinets</a></li>
+                        <li><a href="#">Coffee & Tables</a></li>
+                        <li><a href="#">Outdoor Furniture </a></li>
+                    </ul><!-- End .mobile-cats-menu -->
+                </nav><!-- End .mobile-cats-nav -->
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<style>
+    box {
+    margin-bottom: 30px;
+}
+
+.bg1 {
+    background: url(https://webcaycanh.com/wp-content/themes/cay/imgs/bg1.png) no-repeat top;
+    min-height: 215px;
+    background-size: contain;
+    padding: 15px 0;
+}
+.text-center {
+    text-align: center !important;
+}
+
+
+    .carousel-item-next, .carousel-item-prev, .carousel-item.active {
+    display: block;
+}
+
+h2.tit-box.cl_xanh6 {
+    height: 135px;
+}
+
+.cl_xanh6, .breadcrumb_last {
+    color: #5ba503;
+}
+.tit-box {
+    text-transform: uppercase;
+    font: 30px / 35px 'UTMHelvetIns';
+    padding-top: 100px;
+    background: url(https://webcaycanh.com/wp-content/themes/cay/imgs/bg_tit.png) no-repeat top center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+</style>
+<!-- Plugins JS File -->
+<div th:replace="layout/script :: script"></div>
+<script>
+
+</script>
+</body>
+
+
+<!-- Mirrored from portotheme.com/html/molla/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 19 Jan 2024 02:55:58 GMT -->
+</html>

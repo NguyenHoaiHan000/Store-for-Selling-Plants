@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Examples</a></li>
+                <li class="active">Product List</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Danh sách sản phẩm</h3>
+                            </div>
+
+                            <div class="box-body">
+                                <form th:action="@{/admin/product}" method="get" class="form-inline my-2 my-lg-0">
+                                    <div class="input-group">
+                                        <!-- Input tìm kiếm -->
+                                        <input type="text" class="form-control" placeholder="Search..." name="keyword"
+                                               th:value="${keyword}" style="width: 250px;">
+
+                                        <!-- Dropdown chọn danh mục -->
+                                        <select name="categoryId" class="form-control mx-2" style="width: 100px;">
+                                            <option value="" th:selected="${selectedCategoryId == null}">Tất cả c</option>
+                                            <option th:each="category : ${categories}" th:value="${category.id}"
+                                                    th:text="${category.name}"
+                                                    th:selected="${selectedCategoryId == category.id}"></option>
+                                        </select>
+
+                                        <!-- Nút tìm kiếm -->
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+
+                                <table id="example1" class="table table-bordered table-striped dataTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Mô tả</th>
+                                        <th>Giá</th>
+                                        <th>Hình ảnh</th>
+                                        <th>Trạng thái</th>
+                                        <th>Số lượng tồn</th>
+                                        <th>Danh mục</th>
+                                        <th>Tùy chọn</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product : ${products}">
+                                        <td th:text="${product.id}"></td>
+                                        <td th:text="${product.Name}"></td>
+                                        <td th:text="${product.description}"></td>
+                                        <td th:text="${product.price}"></td>
+                                        <td><img th:src="${product.image}" alt="Product Image"
+                                                 style="width: 120px; height: 100PX;"></td>
+                                        <td th:text="${product.status ? 'Đang kinh doanh' : 'Ngừng kinh doanh'}"></td>
+                                        <td th:text="${product.number}"></td>
+                                        <td th:text="${product.category.Name}"></td>
+                                        <td>
+                                            <a th:href="@{/admin/product/edit/{id}(id=${product.id})}"
+                                               class="btn btn-success"><i class="bi bi-pencil-square"></i> Sửa</a>
+                                            <a th:href="@{/admin/product/delete/{id}(id=${product.id})}"
+                                               class="delete-btn btn btn-danger"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');"><i
+                                                    class="bi bi-trash"></i> Xóa</a>
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!--                        PHÂN TRANG-->
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                            <a class="page-link" th:href="@{/admin/product(page=0,size=${size}, keyword=${keyword}, categoryId=${selectedCategoryId})}">Previous</a>
+                                        </li>
+                                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                            th:class="${currentPage == i} ? 'page-item active' : 'page-item'">
+                                            <a class="page-link" th:href="@{/admin/product(page=${i},size=${size}, keyword=${keyword}, categoryId=${selectedCategoryId})}"
+                                               th:text="${i + 1}"></a>
+                                        </li>
+                                        <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                            <a class="page-link"
+                                               th:href="@{/admin/product(page=${currentPage + 1},size=${size}, keyword=${keyword}, categoryId=${selectedCategoryId})}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<div th:replace="admin/fragments/script :: script"></div>
+</body>
+</html>

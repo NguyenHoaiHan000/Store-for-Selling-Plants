@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Chỉnh sửa sản phẩm
+                <small>Cập nhật thông tin sản phẩm</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Quản lý sản phẩm</a></li>
+                <li class="active">Chỉnh sửa sản phẩm</li>
+            </ol>
+        </section>
+
+        <section class="content" style="margin: 0; height: 85vh; display: grid; place-items: center;">
+            <div class=" col-md-7">
+                <div class="card">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Chỉnh sửa sản phẩm</h3>
+                        </div>
+
+                        <form th:action="@{/admin/product/edit/{id}(id=${product.id})}" th:object="${product}"
+                              method="post"
+                              enctype="multipart/form-data">
+                            <div class="box-body">
+                                <input type="hidden" id="productId" th:value="${product.id}" name="id"/>
+                                <div class="form-group">
+                                    <label for="productName">Tên sản phẩm</label>
+                                    <input type="text" class="form-control" id="productName" name="Name"
+                                           placeholder="Nhập tên sản phẩm" th:value="${product.Name}"
+                                           >
+                                </div>
+                                <div class="form-group">
+                                    <label for="productDescription">Mô tả</label>
+                                    <textarea class="form-control" id="productDescription" name="description"
+                                              placeholder="Nhập mô tả sản phẩm"
+                                              th:text="${product.description}"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="productPrice">Giá</label>
+                                    <input type="number" class="form-control" id="productPrice" name="price"
+                                           placeholder="Nhập giá sản phẩm" th:value="${product.price}"
+                                           >
+                                </div>
+                                <div class="form-group">
+                                    <label for="productImage">Ảnh sản phẩm</label>
+                                    <input type="file" id="productImage" name="file" onchange="previewImage(event)">
+                                    <div>
+                                        <img style ="width:300px;height:300px;" id="preview" th:src="@{${product.image}}" alt="Ảnh sản phẩm hiện tại"
+                                             >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="number">Number:</label>
+                                    <input style="width:115px" type="number" class="form-control" id="number"
+                                           name="number"
+                                           th:value="${product.number}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Category:</label>
+                                    <select class="form-control" id="category" name="category.id" required>
+                                        <!-- Lặp và hiển thị danh sách các danh mục sản phẩm -->
+                                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                                th:selected="${product.category.id == category.id}"
+                                                th:text="${category.Name}"></option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function(){
+            var dataURL = reader.result;
+            var imgElement = document.getElementById('preview');
+            imgElement.src = dataURL;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
+<div th:replace="admin/fragments/script :: script"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Login 05</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link to Material Design Iconic Font -->
+    <link rel="stylesheet" th:href="@{/signup/assets/fonts/material-icon/css/material-design-iconic-font.min.css}">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" th:href="@{/signup/assets/css/style.css}">
+</head>
+<body>
+<div class="main">
+    <section class="sign-in">
+        <div class="container">
+            <div class="signin-content">
+                <div class="signin-image">
+                    <figure><img th:src="@{/signup/assets/images/signin-image.jpg}" alt="sign in image"></figure>
+                    <a href="/register" class="signup-image-link">Create an account</a>
+                </div>
+
+                <div class="signin-form">
+                    <h2 class="form-title">Sign in</h2>
+                    <form action="/login" method="POST" class="register-form" id="login-form">
+                        <div class="form-group">
+                            <label for="userName"><i class="zmdi zmdi-account material-icons-Name"></i></label>
+                            <input type="text" name="userName" id="userName" placeholder="Your Name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="password" id="password" placeholder="Password"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                            <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                        </div>
+                        <div class="form-group form-button">
+                            <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- JavaScript -->
+<script th:src="@{/signup/assets/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/signup/assets/js/main.js}"></script>
+</body>
+</html>

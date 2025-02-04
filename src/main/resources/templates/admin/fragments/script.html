@@ -1,0 +1,29 @@
+<div th:fragment="script" xmlns:th="http://www.w3.org/1999/xhtml">
+    <script  th:src="@{/assets/js/jquery.min.js}"></script>
+    <script  th:src="@{/assets/js/jquery-ui.js}"></script>
+    <script  th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script  th:src="@{/assets/js/adminlte.min.js}"></script>
+    <script  th:src="@{/assets/js/dashboard.js}"></script>
+    <script  th:src="@{/assets/tinymce/tinymce.min.js}"></script>
+    <script  th:src="@{/assets/tinymce/config.js}"></script>
+    <script  th:src="@{/assets/js/function.js}"></script>
+    <!-- Thêm jQuery từ CDN nếu chưa có -->
+    <!-- Thêm jQuery từ CDN -->
+    <script th:src="@{/assets/js/angular.min.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Lấy tất cả các ô chứa số và định dạng chúng
+        document.querySelectorAll('#example1 td').forEach(function(td) {
+            let value = parseFloat(td.innerText);
+            if (!isNaN(value)) {
+                // Định dạng số với dấu phân cách hàng nghìn và số thập phân
+                td.innerText = value.toLocaleString('vi-VN', { style: 'decimal', maximumFractionDigits: 2 });
+            }
+        });
+    });
+    </script>
+</div>

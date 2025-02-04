@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from portotheme.com/html/molla/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 19 Jan 2024 02:54:34 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+
+<head th:replace="layout/head :: head"/>
+</head>
+
+<body>
+<div class="page-wrapper">
+    <head th:replace="layout/header :: header"/>
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                </ol>
+            </div>
+        </nav>
+        <div class="page-content">
+            <div class="cart">
+                <div class="container">
+                    <div class="row">
+                        <aside class="col-md-2 col-lg-2">
+                            <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-orders-link" th:href="@{/user/order/history}" role="tab" aria-controls="tab-orders" aria-selected="false">Lịch sữ đơn hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-account-link" th:href="@{/user/AccountDetail}" role="tab" aria-controls="tab-account" aria-selected="true">Thông tin</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                                </li>
+                            </ul>
+
+                        </aside>
+                        <div class="col-lg-9">
+                            <div class="tab-content">
+                                <div class="tab-pane fade" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                    <p>Hello <span class="font-weight-normal text-dark" th:text="${user.name}">User</span> (not <span class="font-weight-normal text-dark" th:text="${user.name}">User</span>? <a href="#">Log out</a>)
+                                        <br>
+                                        From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+                                </div><!-- .End .tab-pane -->
+
+
+                                <div class="tab-pane fade active show" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                    <form action="#" th:action="@{/user/AccountDetail}" method="post">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>First Name *</label>
+                                                <input type="text" class="form-control" th:value="${user.surname}" name="surname" required="">
+                                                <span th:if="${errorMessages.containsKey('surname')}" style="color: red;" th:text="${errorMessages['surname']}"></span>
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <label>Last Name *</label>
+                                                <input type="text" class="form-control" th:value="${user.name}" name="name" required="">
+                                                <span th:if="${errorMessages.containsKey('name')}" style="color: red;" th:text="${errorMessages['name']}"></span>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" th:value="${user.address}" name="address">
+                                        <span th:if="${errorMessages.containsKey('address')}" style="color: red;" th:text="${errorMessages['address']}"></span>
+
+                                        <label>Phone Number *</label>
+                                        <input type="text" class="form-control" th:value="${user.sdt}" name="sdt" required="">
+                                        <span th:if="${errorMessages.containsKey('sdt')}" style="color: red;" th:text="${errorMessages['sdt']}"></span>
+
+                                        <label>Email address *</label>
+                                        <input type="email" class="form-control" th:value="${user.account != null ? user.account.email : ''}" name="email" required="">
+                                        <span th:if="${errorMessages != null and errorMessages.containsKey('email')}" style="color: red;" th:text="${errorMessages['email']}"></span>
+
+                                        <label>Date of Birth</label>
+                                        <input type="text" class="form-control" th:value="${#dates.format(user.dayOfBirth, 'yyyy-MM-dd')}" name="dayOfBirth">
+                                        <span th:if="${errorMessages.containsKey('dayOfBirth')}" style="color: red;" th:text="${errorMessages['dayOfBirth']}"></span>
+
+                                        <label>Current password (leave blank to leave unchanged)</label>
+                                        <input type="password" class="form-control" name="currentPassword">
+                                        <span th:if="${errorMessages.containsKey('currentPassword')}" style="color: red;" th:text="${errorMessages['currentPassword']}"></span>
+
+                                        <label>New password (leave blank to leave unchanged)</label>
+                                        <input type="password" class="form-control" name="newPassword">
+                                        <span th:if="${errorMessages.containsKey('newPassword')}" style="color: red;" th:text="${errorMessages['newPassword']}"></span>
+
+                                        <label>Confirm new password</label>
+                                        <input type="password" class="form-control mb-2" name="confirmNewPassword">
+                                        <span th:if="${errorMessages.containsKey('confirmNewPassword')}" style="color: red;" th:text="${errorMessages['confirmNewPassword']}"></span>
+
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SAVE CHANGES</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </form>
+
+
+                                </div><!-- .End .tab-pane -->
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="layout/footer :: footer"/>
+
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container mobile-menu-light">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+                   required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab"
+                   aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="mobile-cats-link" data-toggle="tab" href="#mobile-cats-tab" role="tab"
+                   aria-controls="mobile-cats-tab" aria-selected="false">Categories</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel"
+                 aria-labelledby="mobile-menu-link">
+                <nav class="mobile-nav">
+                    <ul class="mobile-menu">
+                        <li>
+                            <a href="#">Pages</a>
+                        </li>
+
+
+                    </ul>
+                </nav><!-- End .mobile-nav -->
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="mobile-cats-tab" role="tabpanel" aria-labelledby="mobile-cats-link">
+                <nav class="mobile-cats-nav">
+                    <ul class="mobile-cats-menu">
+                        <li><a class="mobile-cats-lead" href="#">Daily offers</a></li>
+                        <li><a class="mobile-cats-lead" href="#">Gift Ideas</a></li>
+                        <li><a href="#">Beds</a></li>
+                        <li><a href="#">Lighting</a></li>
+                        <li><a href="#">Sofas & Sleeper sofas</a></li>
+                        <li><a href="#">Storage</a></li>
+                        <li><a href="#">Armchairs & Chaises</a></li>
+                        <li><a href="#">Decoration </a></li>
+                        <li><a href="#">Kitchen Cabinets</a></li>
+                        <li><a href="#">Coffee & Tables</a></li>
+                        <li><a href="#">Outdoor Furniture </a></li>
+                    </ul><!-- End .mobile-cats-menu -->
+                </nav><!-- End .mobile-cats-nav -->
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<!-- Sign in / Register Modal -->
+<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <div class="form-tab">
+                        <ul class="nav nav-pills nav-fill nav-border-anim" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
+                                   aria-controls="signin" aria-selected="true">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab"
+                                   aria-controls="register" aria-selected="false">Register</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                 aria-labelledby="signin-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="singin-email">Username or email address *</label>
+                                        <input type="text" class="form-control" id="singin-email" name="singin-email"
+                                               required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="singin-password">Password *</label>
+                                        <input type="password" class="form-control" id="singin-password"
+                                               name="singin-password" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>LOG IN</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="signin-remember">
+                                            <label class="custom-control-label" for="signin-remember">Remember
+                                                Me</label>
+                                        </div><!-- End .custom-checkbox -->
+
+                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .form-choice -->
+                            </div><!-- .End .tab-pane -->
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="register-email">Your email address *</label>
+                                        <input type="email" class="form-control" id="register-email"
+                                               name="register-email" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="register-password">Password *</label>
+                                        <input type="password" class="form-control" id="register-password"
+                                               name="register-password" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SIGN UP</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="register-policy"
+                                                   required>
+                                            <label class="custom-control-label" for="register-policy">I agree to the <a
+                                                    href="#">privacy policy</a> *</label>
+                                        </div><!-- End .custom-checkbox -->
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login  btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .form-choice -->
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+<script th:inline="javascript">
+    function toggleDetails(orderId) {
+        const detailsRow = document.getElementById(`detailsRow_${orderId}`);
+        if (detailsRow.style.display === "none" || detailsRow.style.display === "") {
+            detailsRow.style.display = "table-row";
+        } else {
+            detailsRow.style.display = "none";
+        }
+    }
+
+
+</script>
+
+
+<!-- Plugins JS File -->
+<div th:replace="layout/script :: script"></div>
+</body>
+</html>

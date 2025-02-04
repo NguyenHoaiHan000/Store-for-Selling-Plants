@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Chỉnh sửa nhân viên
+                <small>Cập nhật thông tin nhân viên</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Quản lý nhân viên</a></li>
+                <li class="active">Chỉnh sửa nhân viên</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Chỉnh sửa nhân viên</h3>
+                </div>
+
+                <form th:action="@{/admin/staff/edit/{id}(id=${staff.id})}" th:object="${staff}" method="post"
+                      enctype="multipart/form-data">
+                    <div class="box-body">
+                        <input type="hidden" id="staffId" th:value="${staff.id}" name="id"/>
+                        <div class="form-group">
+                            <label for="ho">Họ</label>
+                            <input type="text" class="form-control" id="ho" name="ho"
+                                   placeholder="Nhập họ" th:value="${staff.ho}">
+                        </div>
+                        <div class="form-group">
+                            <label for="Name">Tên</label>
+                            <input type="text" class="form-control" id="Name" name="Name"
+                                   placeholder="Nhập tên" th:value="${staff.Name}">
+                        </div>
+                        <div class="form-group">
+                            <label for="cmnd">Số CMND</label>
+                            <input type="text" class="form-control" id="cmnd" name="cmnd"
+                                   placeholder="Nhập số CMND" th:value="${staff.cmnd}">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Địa chỉ</label>
+                            <input type="text" class="form-control" id="address" name="address"
+                                   placeholder="Nhập địa chỉ" th:value="${staff.address}">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Giới tính</label>
+                            <select class="form-control" id="gender" name="gender">
+                                <option value="male" th:selected="${staff.gender == 'male'}">Nam</option>
+                                <option value="female" th:selected="${staff.gender == 'female'}">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sdt">Số điện thoại</label>
+                            <input type="text" class="form-control" id="sdt" name="sdt"
+                                   placeholder="Nhập số điện thoại" th:value="${staff.sdt}">
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth">Ngày sinh</label>
+                            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                                   th:value="${staff.dateOfBirth}">
+                        </div>
+                        <div class="form-group">
+                            <label for="account">Tên tài khoản</label>
+                            <input type="text" class="form-control" id="account" name="account.userName"
+                                   placeholder="Tên tài khoản" th:value="${staff.account.username}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Ảnh đại diện</label>
+                            <input type="file" id="image" name="file" onchange="previewImage(event)">
+                            <div>
+                                <img id="preview" th:src="@{${staff.image}}" alt="Ảnh đại diện"
+                                     style="max-width: 200px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function(){
+            var dataURL = reader.result;
+            var imgElement = document.getElementById('preview');
+            imgElement.src = dataURL;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
+<div th:replace="admin/fragments/script :: script"></div>
+</body>
+</html>

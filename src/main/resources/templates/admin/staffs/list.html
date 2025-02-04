@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Danh sách nhân viên
+                <small>Bắt đầu từ đây</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Ví dụ</a></li>
+                <li class="active">Danh sách nhân viên</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Danh sách nhân viên</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Mã nhân viên</th>
+                            <th>Họ</th>
+                            <th>Tên</th>
+                            <th>Ảnh</th>
+                            <th>CMND</th>
+                            <th>Địa chỉ</th>
+                            <th>Giới tính</th>
+                            <th>Số điện thoại</th>
+                            <th>Ngày sinh</th>
+                            <th>Tài khoản</th>
+                            <th>Tùy chọn</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Thymeleaf loop to iterate over staffs -->
+                        <tr th:each="staff, index : ${staffs}">
+                            <td th:text="${staff.id}">Mã nhân viên</td>
+                            <td th:text="${staff.ho}">Họ</td>
+                            <td th:text="${staff.Name}">Tên</td>
+                            <td>
+                                <img th:src="${staff.image}" alt="Ảnh nhân viên" style="width: 65px; height: 45px;">
+                            </td>
+                            <td th:text="${staff.cmnd}">CMND</td>
+                            <td th:text="${staff.address}">Địa chỉ</td>
+                            <td th:text="${staff.gender}">Giới tính</td>
+                            <td th:text="${staff.sdt}">Số điện thoại</td>
+                            <td th:text="${staff.dateOfBirth}">Ngày sinh</td>
+                            <td th:text="${staff.account.username}">Tài khoản</td>
+                            <td>
+                                <a th:href="@{/admin/staff/edit/{id}(id=${staff.id})}" class="btn btn-success"><i class="bi bi-pencil-square"></i> Sửa</a>
+                                <form th:action="@{/admin/staff/delete/{id}(id=${staff.id})}" method="post" style="display:inline;" onsubmit="return confirmDelete(this);">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" class="btn btn-danger"> <i class="bi bi-trash"></i> Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/admin/staff(page=0,size=${size})}">Previous</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:class="${currentPage == i} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/admin/staff(page=${i},size=${size})}" th:text="${i + 1}"></a>
+                            </li>
+                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/admin/staff(page=${currentPage + 1},size=${size})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+<script>
+    function confirmDelete(form) {
+        return confirm("Bạn có chắc chắn muốn xóa nhân viên này không?");
+    }
+</script>
+<div th:replace="admin/fragments/script :: script"></div>
+
+</body>
+</html>

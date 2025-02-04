@@ -1,0 +1,157 @@
+<aside class="main-sidebar" th:fragment="sidebar" xmlns:th="http://www.w3.org/1999/xhtml"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img th:src="${#authentication.principal.staff.image}" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p><span sec:authentication="Name"></span></p>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+        <!-- search form -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+        </form>
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <!--QUẢN LÝ DANH MỤC-->
+            <li  style="height: auto;">
+                <a th:href="@{/admin/home}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="treeview  " style="height: auto;">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>quản lý danh mục</span>
+                    <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu" style="">
+                    <li class="active"><a href="/admin/categories"><i class="fa fa-circle-o"></i>Danh sách</a></li>
+                </ul>
+            </li>
+            <!--QUẢN LÝ SẢN PHẨM-->
+            <li class="treeview  ">
+                <a href="#">
+                    <i class="fa fa-fw fa-database"></i> <span>Quản lý sản phẩm</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/product"><i class="fa fa-circle-o"></i> Danh sách sản phẩm</a></li>
+                    <li><a href="/admin/product/add"><i class="fa fa-circle-o"></i> Thêm sản phẩm</a></li>
+                </ul>
+            </li>
+            <!--QUẢN LÝ NHÀ CUNG CẤP-->
+            <li class="treeview  ">
+                <a href="#">
+                    <i class="fas fa-truck"></i> <span>Quản lý nhà cung cấp</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/supplier"><i class="fa fa-circle-o"></i> Danh sách nhà cung cấp</a></li>
+                    <li><a href="/admin/supplier/add"><i class="fa fa-circle-o"></i> Thêm nhà cung cấp</a></li>
+                </ul>
+            </li>
+            <!--QUẢN LÝ NHÂN VIÊN-->
+            <li class="treeview  ">
+                <a href="#">
+                    <i class="fa fa-fw fa-user"></i> <span>Quản lý nhân viên</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/staff"><i class="fa fa-circle-o"></i> Danh sách nhân viên</a></li>
+                    <li><a href="//admin/staff/add"><i class="fa fa-circle-o"></i> Thêm nhà nhân viên</a></li>
+                </ul>
+            </li>
+
+            <!-- QUẢN LÝ PIẾU NHẬP            -->
+            <li class="treeview  ">
+                <a href="#">
+                    <i class="fas fa-receipt"></i>
+                    <span> Quản lý phiếu nhập</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/receipt"><i class="fa fa-circle-o"></i> Danh sách phiếu nhập</a></li>
+                    <li><a href="/admin/receipt/add"><i class="fa fa-circle-o"></i> Thêm phiếu nhập</a></li>
+                </ul>
+            </li>
+            <!--Quản lý phiếu đặt            -->
+            <li >
+                <a href="/admin/order">
+                    <i class="fas fa-file-invoice"></i> <span>Quản lý phiếu đặt </span>
+                    <span class="pull-right-container">
+
+            </span>
+                </a>
+
+            </li>
+            <li >
+                <a href="/admin/Statistic">
+                    <i class="fa fa-fw fa-bar-chart-o"></i> <span>Thống kê</span>
+                </a>
+            </li>
+            <li class="treeview  ">
+                <a href="/admin/plant-attributes/list">
+                    <i class="fa fa-fw fa-tree"></i> <span>Thuộc tính cho cây</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/plant-attributes/list"><i class="fa fa-circle-o"></i> danh sách</a></li>
+                    <li><a href="/admin/plant-attributes/add"><i class="fa fa-circle-o"></i> thêm</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview  ">
+                <a href="#">
+                    <i class="fa fa-fw fa-fish"></i> <span>Thuộc tính cho cá</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/admin/fish-attributes/list"><i class="fa fa-circle-o"></i> danh sách</a></li>
+                    <li><a href="/admin/fish-attributes/add"><i class="fa fa-circle-o"></i> thêm</a></li>
+                </ul>
+            </li>
+
+            <li >
+                <a href="/admin/listUser/list">
+                    <i class="fa fa-fw fa-user"></i> <span>Danh sách khách hàng</span>
+                </a>
+
+            </li>
+            <li >
+                <a href="/admin/productStart/list">
+                    <i class="fa fa-star"></i> <span>Sản phẩm đánh giá</span>
+
+                </a>
+
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

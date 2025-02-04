@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Danh sách đơn hàng
+                <small>Bắt đầu từ đây</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Ví dụ</a></li>
+                <li class="active">Danh sách đơn hàng</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Danh sách đơn hàng</h3>
+                    <div class="box-tools">
+                        <select class="form-control" id="statusFilter" onchange="filterOrders()">
+                            <option value="ALL">Tất cả</option>
+                            <option value="1">Chưa duyệt</option>
+                            <option value="2">Đã duyệt</option>
+                            <option value="3">Đã hủy</option>
+                            <option value="4">Đã đóng gói</option>
+                            <option value="5">Khách hủy</option>
+                            <option value="6">Hoàn tất</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="orderTable" class="table table-bordered table-striped dataTable">
+                        <thead>
+                        <tr>
+                            <th>Mã phiếu đặt</th>
+                            <th>Ngày lập</th>
+                            <th>Trạng thái</th>
+                            <th>Nhân viên</th>
+                            <th>Giỏ hàng</th>
+                            <th>Chi tiết</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${#dates.format(order.date, 'yyyy-MM-dd')}"></td>
+                            <td>
+                                <span>
+                            <span th:if="${order.status == 1}">Chưa duyệt</span>
+                            <span th:if="${order.status == 2}">Đã duyệt</span>
+                            <span th:if="${order.status == 3}">Đã hủy</span>
+                            <span th:if="${order.status == 4}">Đã đóng gói</span>
+                            <span th:if="${order.status == 5}">Khách hủy</span>
+                            <span th:if="${order.status == 6}">Hoàn tất</span>
+                            <span th:if="${order.status != 1 && order.status != 2 && order.status != 3 && order.status != 4 && order.status != 5 && order.status != 6}">Không xác định</span>
+                            </span>
+
+                            </td>
+                            <td th:text="${order.staff != null ? order.staff.name : 'N/A'}"></td>
+                            <td th:text="${order.cart.id}"></td>
+                            <td>
+                                <!-- Hiển thị các nút khi trạng thái đơn hàng là 1, 2, 3 hoặc 4 -->
+                                <a href="#" class="view-details-btn btn btn-info" th:data-order-id="${order.id}"
+                                   data-toggle="modal" data-target="#orderDetailModal"
+                                   th:if="${order.status == 1 || order.status == 2 || order.status == 3 || order.status == 4 || order.status == 5|| order.status == 6}">
+                                    <i class="bi bi-info-circle"></i> Thông Tin
+                                </a>
+                                <!-- Hiển thị nút Duyệt khi trạng thái đơn hàng là 1 -->
+                                <a href="#" class="btn btn-success" th:data-order-id="${order.id}" data-toggle="modal"
+                                   data-target="#approveOrderModal" th:if="${order.status == 1}">
+                                    <i class="bi bi-check-circle"></i> Duyệt
+                                </a>
+                                <!-- Hiển thị nút Hủy khi trạng thái đơn hàng là 1 hoặc 5 -->
+                                <a href="#" class="btn btn-warning" th:data-order-id="${order.id}" data-toggle="modal"
+                                   data-target="#cancelOrderModal" th:if="${order.status == 1 }">
+                                    <i class="bi bi-x"></i> Hủy
+                                </a>
+                                <!-- Hiển thị nút Đóng Gói khi trạng thái đơn hàng là 2 -->
+                                <a href="#" class="btn btn-secondary" th:if="${order.status == 2}"
+                                   data-toggle="modal" data-target="#packOrderModal"
+                                   th:data-order-id="${order.id}">
+                                    <i class="bi bi-box"></i> Đóng Gói
+                                </a>
+                                <!-- Hiển thị nút Khách Hủy khi trạng thái đơn hàng là 4 -->
+                                <a href="#" class="btn btn-danger" th:if="${order.status == 4}"
+                                   data-toggle="modal" data-target="#customerCancelOrderModal"
+                                   th:data-order-id="${order.id}">
+                                    <i class="bi bi-x-circle"></i> Khách Hủy
+                                </a>
+                                <!-- Hiển thị nút Hoàn Tất khi trạng thái đơn hàng là 4 -->
+                                <a href="#" class="btn btn-primary" th:if="${order.status == 4}"
+                                   data-toggle="modal" data-target="#completeOrderModal"
+                                   th:data-order-id="${order.id}">
+                                    <i class="bi bi-check-circle"></i> Hoàn Tất
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="box-footer clearfix">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/admin/order(page=0,size=${size})}">Previous</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:class="${currentPage == i} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/admin/order(page=${i},size=${size})}"
+                                   th:text="${i + 1}"></a>
+                            </li>
+                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/admin/order(page=${currentPage + 1},size=${size})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<!-- Modal chi tiết đơn hàng -->
+<div class="modal fade" id="orderDetailModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>Order ID: <span th:text="${orderId}"></span></h5>
+                <div th:if="${customer != null}">
+                    <h2>Thông tin khách hàng</h2>
+                    <p>Họ và tên: <span th:text="${customer.name}"></span></p>
+                    <p>Email: <span th:text="${customer.account.email}"></span></p>
+                    <p>Số điện thoại: <span th:text="${customer.phoneNumber}"></span></p>
+                    <p>Địa chỉ: <span th:text="${customer.address}"></span></p>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <!--            <th>Hình ảnh</th>-->
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tổng giá sản phẩm</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="detail : ${orderDetails}">
+                        <td th:text="${detail.product != null ? detail.product.name : 'N/A'}"></td>
+                        <!-- Kiểm tra nếu trạng thái đơn hàng bằng 2 -->
+                        <td>
+                            <div th:if="${order.status == 2}">
+                                <!-- Nếu trạng thái là 2, cho phép chỉnh sửa số lượng -->
+                                <input type="number" th:value="${orderDetail.quantity}" min="1"/>
+                            </div>
+                            <div th:unless="${order.status == 2}">
+                                <!-- Nếu trạng thái không phải là 2, chỉ hiển thị số lượng dưới dạng văn bản -->
+                                <span th:text="${orderDetail.quantity}"></span>
+                            </div>
+                        </td>
+
+                        <td th:text="${detail.price}"></td>
+                        <td th:text="${detail.productTotal}"></td>
+                        <td>
+                            <form th:action="@{/admin/order/{orderId}/details/delete(orderId=${detail.order.id}, productId=${detail.product.id})}"
+                                  method="post">
+                                <input type="hidden" name="orderId" th:value="${detail.order.id}"/>
+                                <input type="hidden" name="productId" th:value="${detail.product.id}"/>
+                                <button type="submit" class="btn btn-danger">Xóa</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(orderDetails)}">
+                        <td colspan="3">No details available</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal duyệt đơn hàng -->
+<div class="modal fade" id="approveOrderModal" tabindex="-1" role="dialog" aria-labelledby="approveOrderModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveOrderModalLabel">Xác nhận duyệt đơn hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn duyệt đơn hàng này?
+            </div>
+            <div class="modal-footer">
+                <form id="approveOrderForm">
+                    <input type="hidden" id="orderId" name="id">
+                    <button type="button" class="btn btn-primary" id="confirmApprove">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hủy Đơn Hàng -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelOrderModalLabel">Hủy đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn hủy đơn hàng này? <br>
+                <span id="orderIdDisplay">ID đơn hàng: </span> <!-- Hiển thị ID ở đây -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger" id="confirmCancelOrder">Xác nhận hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Đóng Gói Đơn Hàng -->
+<div class="modal fade" id="packOrderModal" tabindex="-1" role="dialog" aria-labelledby="packOrderModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="packOrderModalLabel">Xác nhận đóng gói đơn hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn đóng gói đơn hàng này? <br>
+                <span id="orderIdPackDisplay">ID đơn hàng: </span> <!-- Hiển thị ID ở đây -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" id="confirmPackOrder">Xác nhận đóng gói</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Khách Hủy -->
+<div class="modal fade" id="customerCancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="customerCancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customerCancelOrderModalLabel">Xác Nhận Hủy Đơn Hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn hủy đơn hàng này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <form action="#" th:action="@{/admin/order/CustomerCancelOrder}" method="post" id="cancelOrderForm">
+                    <input type="hidden" name="id" id="cancelOrderId" />
+                    <button type="submit" class="btn btn-danger">Hủy Đơn Hàng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hoàn Tất -->
+<div class="modal fade" id="completeOrderModal" tabindex="-1" role="dialog" aria-labelledby="completeOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeOrderModalLabel">Xác Nhận Hoàn Tất Đơn Hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn đánh dấu đơn hàng này là hoàn tất?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <form action="#" th:action="@{/admin/order/Succes}" method="post" id="completeOrderForm">
+                    <input type="hidden" name="id" id="completeOrderId" />
+                    <button type="submit" class="btn btn-primary">Hoàn Tất Đơn Hàng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.view-details-btn').click(function() {
+            var orderId = $(this).data('order-id');
+            $('#orderDetailModal').find('.modal-body').load('/admin/order/' + orderId + '/details', function(response, status, xhr) {
+                if (status == "error") {
+                    var msg = "Sorry but there was an error: ";
+                    $("#error").html(msg + xhr.status + " " + xhr.statusText);
+                } else {
+                    $('#orderDetailModal').modal('show');
+                }
+            });
+        });
+<!--DUYỆT-->
+        $('#approveOrderModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var orderId = button.data('order-id');
+            var modal = $(this);
+            modal.find('#orderId').val(orderId);
+        });
+
+        $('#confirmApprove').on('click', function() {
+            var orderId = $('#orderId').val();
+            $.ajax({
+                url: '/admin/order/approve',
+                type: 'POST',
+                data: { id: orderId },
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('approveOrderModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+                     window.location.href = '/admin/order'
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        });
+
+        function reloadOrderList() {
+            $.ajax({
+                url: '/admin/order',
+                type: 'GET',
+                success: function(response) {
+                    $('#orderTable tbody').html(response);
+                },
+                error: function(xhr) {
+                    alert('Không thể tải lại danh sách đơn hàng.');
+                }
+            });
+        }
+    });
+
+<!--    HỦY-->
+
+// Khi mở modal hủy, lưu ID đơn hàng và hiển thị lên giao diện
+$(document).ready(function() {
+    // Khi mở modal hủy, lưu ID đơn hàng và hiển thị lên giao diện
+    $('#cancelOrderModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Nút hủy đã nhấn
+        var orderId = button.data('order-id'); // Lấy ID đơn hàng từ dữ liệu của nút
+        var modal = $(this);
+
+        // Cập nhật phần tử hiển thị ID trong modal
+        modal.find('#orderIdDisplay').text('ID đơn hàng: ' + orderId);
+
+        // Lưu ID vào thuộc tính của modal để sử dụng sau
+        modal.data('order-id', orderId);
+    });
+
+    // Khi nhấn nút xác nhận hủy, lấy ID từ thuộc tính của modal và gửi AJAX
+    $('#confirmCancelOrder').on('click', function() {
+        var modal = $('#cancelOrderModal');
+        var orderId = modal.data('order-id'); // Lấy ID từ thuộc tính của modal
+
+        console.log('Order ID khi nhấn hủy: ' + orderId); // Hiển thị ID trong console
+
+        if (orderId) {
+            $.ajax({
+                url: '/admin/order/cancel', // Endpoint hủy đơn hàng
+                type: 'POST',
+                data: { id: orderId },
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    var modalInstance = bootstrap.Modal.getInstance(modal[0]);
+                    if (modalInstance) {
+                        modalInstance.hide(); // Đóng modal sau khi hủy thành công
+                    }
+                    window.location.href = '/admin/order'; // Tải lại danh sách đơn hàng
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText); // Hiển thị lỗi nếu có
+                }
+            });
+        } else {
+            console.log('Không tìm thấy Order ID'); // Nếu không có ID
+        }
+    });
+});
+
+
+<!-- ĐÓNG GÓI-->
+
+    $(document).ready(function() {
+    // Khi mở modal đóng gói
+    $('#packOrderModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Nút đóng gói đã nhấn
+        var orderId = button.data('order-id'); // Lấy ID đơn hàng từ dữ liệu của nút
+        var modal = $(this);
+
+        // Cập nhật phần tử hiển thị ID trong modal
+        modal.find('#orderIdPackDisplay').text('ID đơn hàng: ' + orderId);
+
+        // Lưu ID vào thuộc tính của modal để sử dụng sau
+        modal.data('order-id', orderId);
+    });
+
+    // Khi nhấn nút xác nhận đóng gói
+    $('#confirmPackOrder').on('click', function() {
+        var modal = $('#packOrderModal');
+        var orderId = modal.data('order-id'); // Lấy ID từ thuộc tính của modal
+
+        if (orderId) {
+            $.ajax({
+                url: '/admin/order/pack', // Endpoint đóng gói đơn hàng
+                type: 'POST',
+                data: { id: orderId },
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    var modalInstance = bootstrap.Modal.getInstance(modal[0]);
+                    if (modalInstance) {
+                        modalInstance.hide(); // Đóng modal sau khi đóng gói thành công
+                    }
+                    window.location.href = '/admin/order'; // Tải lại danh sách đơn hàng
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText); // Hiển thị lỗi nếu có
+                }
+            });
+        } else {
+            console.log('Không tìm thấy Order ID'); // Nếu không có ID
+        }
+    });
+});
+
+<!-- KHÁCH HỦY VÀ HOÀN TẤT-->
+ document.addEventListener('DOMContentLoaded', function () {
+        // Khi nhấp vào nút Khách Hủy
+        document.querySelectorAll('[data-toggle="modal"][data-target="#customerCancelOrderModal"]').forEach(function (element) {
+            element.addEventListener('click', function () {
+                var orderId = this.getAttribute('data-order-id');
+                document.getElementById('cancelOrderId').value = orderId;
+            });
+        });
+
+        // Khi nhấp vào nút Hoàn Tất
+        document.querySelectorAll('[data-toggle="modal"][data-target="#completeOrderModal"]').forEach(function (element) {
+            element.addEventListener('click', function () {
+                var orderId = this.getAttribute('data-order-id');
+                document.getElementById('completeOrderId').value = orderId;
+            });
+        });
+
+        // Xử lý gửi form Khách Hủy
+        document.getElementById('cancelOrderForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn không gửi form theo cách mặc định
+
+            var form = event.target;
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // Tải lại trang khi thành công
+                    location.reload();
+                } else {
+                    return response.text().then(text => {
+                        alert('Error: ' + text);
+                    });
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra!');
+            });
+        });
+
+        // Xử lý gửi form Hoàn Tất
+        document.getElementById('completeOrderForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn không gửi form theo cách mặc định
+
+            var form = event.target;
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // Tải lại trang khi thành công
+                    location.reload();
+                } else {
+                    return response.text().then(text => {
+                        alert('Error: ' + text);
+                    });
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra!');
+            });
+        });
+    });
+
+
+    function filterOrders() {
+        var status = document.getElementById('statusFilter').value;
+        window.location.href = '/admin/order?status=' + status;
+    }
+</script>
+
+<div th:replace="admin/fragments/script :: script"></div>
+
+</body>
+</html>

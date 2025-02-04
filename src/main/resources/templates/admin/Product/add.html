@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                <li><a href="#">Quản lý sản phẩm</a></li>
+                <li class="active">Thêm sản phẩm mới</li>
+            </ol>
+        </section>
+
+        <section class="content" style="display: grid; place-items: center;">
+            <div class=" col-md-11 row">
+                <div class="card">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Thêm sản phẩm mới</h3>
+                        </div>
+                        <form th:action="@{/admin/product/add}" th:object="${product}" method="post"
+                              enctype="multipart/form-data">
+                            <div class="box-body ">
+                                <!-- Mã sản phẩm -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="productID">Mã sản phẩm</label>
+                                        <input type="text" class="form-control" id="productID" name="id"
+                                               placeholder="Nhập mã sản phẩm" th:field="*{id}">
+                                        <span th:if="${errorMessage != null && errorMessage.contains('mã sản phẩm')}"
+                                              th:text="${errorMessage}" style="color: red;"></span>
+                                    </div>
+
+                                    <!-- Tên sản phẩm -->
+                                    <div class="form-group">
+                                        <label for="productName">Tên sản phẩm</label>
+                                        <input type="text" class="form-control" id="productName" name="name"
+                                               placeholder="Nhập tên sản phẩm" th:field="*{name}">
+                                        <span th:if="${errorMessage != null && errorMessage.contains('Tên sản phẩm')}"
+                                              th:text="${errorMessage}" style="color: red;"></span>
+                                    </div>
+
+                                    <!-- Mô tả sản phẩm -->
+                                    <div class="form-group">
+                                        <label for="productDescription">Mô tả</label>
+                                        <textarea class="form-control" id="productDescription" name="description"
+                                                  placeholder="Nhập mô tả sản phẩm"
+                                                  th:field="*{description}"></textarea>
+                                        <span th:if="${errorMessage != null && errorMessage.contains('Mô tả')}"
+                                              th:text="${errorMessage}" style="color: red;"></span>
+                                    </div>
+
+                                    <!-- Giá sản phẩm -->
+                                    <div class="form-group">
+                                        <label for="productPrice">Giá</label>
+                                        <input type="number" class="form-control" id="productPrice" name="price"
+                                               placeholder="Nhập giá sản phẩm" th:field="*{price}">
+                                        <span th:if="${errorMessage != null && errorMessage.contains('Giá sản phẩm')}"
+                                              th:text="${errorMessage}" style="color: red;"></span>
+                                    </div>
+
+                                    <!-- Ảnh sản phẩm -->
+                                    <div class="form-group">
+                                        <label for="productImage">Ảnh sản phẩm</label>
+                                        <input type="file" id="productImage" name="file" onchange="previewImage(event)">
+                                        <div>
+                                            <img id="preview" src="#" alt="Preview Image"
+                                                 style="max-width: 200px; display: none;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Danh mục sản phẩm -->
+                                    <div class="form-group">
+                                        <label for="category">Danh mục</label>
+                                        <select class="form-control" id="category" name="category.id"
+                                                th:field="*{category.id}" onchange="toggleAttributes()">
+                                            <option th:each="category : ${categories}" th:value="${category.id}"
+                                                    th:text="${category.name}"></option>
+                                        </select>
+                                        <span th:if="${errorMessage != null && errorMessage.contains('Danh mục sản phẩm')}"
+                                              th:text="${errorMessage}" style="color: red;"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 row">
+                                    <!-- Thuộc tính thực vật -->
+                                    <div id="plantAttributes" class="card-header ">
+                                        <h5 class="card-title">Chọn thuộc tính thực vật</h5>
+                                        <div class="card-body">
+                                            <!-- Chiều cao -->
+                                            <div class="col-md-4">
+                                                <span>Chiều cao</span>
+                                                <div class="filter-item">
+                                                    <div th:each="heightOption : ${heightOptions}"
+                                                         class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               th:id="'height-' + ${heightOption}"
+                                                               th:name="height"
+                                                               th:value="${heightOption}"
+                                                        />
+                                                        <label class="custom-control-label"
+                                                               th:for="'height-' + ${heightOption}"
+                                                               th:text="${heightOption}"></label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+
+                                                <!-- Độ khó -->
+                                                <span>Độ khó</span>
+                                                <div class="filter-item">
+                                                    <div th:each="difficultyOption : ${difficultyOptions}"
+                                                         class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               th:id="'difficulty-' + ${difficultyOption}"
+                                                               th:name="difficulty"
+                                                               th:value="${difficultyOption}"
+                                                        />
+                                                        <label class="custom-control-label"
+                                                               th:for="'difficulty-' + ${difficultyOption}"
+                                                               th:text="${difficultyOption}"></label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                            </div>
+
+                                            <div class="col-md-5">
+                                                <!-- Yêu cầu ánh sáng -->
+                                                <span>Yêu cầu ánh sáng</span>
+                                                <div class="filter-item">
+                                                    <div th:each="lightOption : ${lightOptions}"
+                                                         class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               th:id="'light-' + ${lightOption}"
+                                                               th:name="lightRequirement"
+                                                               th:value="${lightOption}"
+                                                        />
+                                                        <label class="custom-control-label"
+                                                               th:for="'light-' + ${lightOption}"
+                                                               th:text="${lightOption}"></label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+
+                                                <!-- Nhu cầu nước -->
+                                                <span>Nhu cầu nước</span>
+                                                <div class="filter-item">
+                                                    <div th:each="waterOption : ${waterOptions}"
+                                                         class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               th:id="'water-' + ${waterOption}"
+                                                               th:name="waterRequirement"
+                                                               th:value="${waterOption}"
+                                                        />
+                                                        <label class="custom-control-label"
+                                                               th:for="'water-' + ${waterOption}"
+                                                               th:text="${waterOption}"></label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Thuộc tính cá -->
+                                    <div id="fishAttributes" class="form-group">
+                                        <label>Chọn thuộc tính cá:</label><br>
+
+                                        <!-- Loài cá -->
+                                        <div>
+                                            <label>Loài cá:</label><br>
+                                            <div th:each="speciesOption : ${speciesOptions}">
+                                                <input type="checkbox" th:id="'species_' + ${speciesOption}"
+                                                       th:name="speciesOptions" th:value="${speciesOption}"/>
+                                                <label th:for="'species_' + ${speciesOption}"
+                                                       th:text="${speciesOption}"></label><br>
+                                            </div>
+                                        </div>
+
+                                        <!-- Kích thước -->
+                                        <div>
+                                            <label>Kích thước:</label><br>
+                                            <div th:each="sizeOption : ${sizeOptions}">
+                                                <input type="checkbox" th:id="'size_' + ${sizeOption}"
+                                                       th:name="sizeOptions" th:value="${sizeOption}"/>
+                                                <label th:for="'size_' + ${sizeOption}" th:text="${sizeOption}"></label><br>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tuổi thọ -->
+                                        <div>
+                                            <label>Tuổi thọ:</label><br>
+                                            <div th:each="lifespanOption : ${lifespanOptions}">
+                                                <input type="checkbox" th:id="'lifespan_' + ${lifespanOption}"
+                                                       th:name="lifespanOptions" th:value="${lifespanOption}"/>
+                                                <label th:for="'lifespan_' + ${lifespanOption}"
+                                                       th:text="${lifespanOption}"></label><br>
+                                            </div>
+                                        </div>
+
+                                        <!-- Độ khó -->
+                                        <div>
+                                            <label>Độ khó:</label><br>
+                                            <div th:each="hardnessOption : ${hardnessOptions}">
+                                                <input type="checkbox" th:id="'hardness_' + ${hardnessOption}"
+                                                       th:name="hardnessOptions" th:value="${hardnessOption}"/>
+                                                <label th:for="'hardness_' + ${hardnessOption}"
+                                                       th:text="${hardnessOption}"></label><br>
+                                            </div>
+                                        </div>
+
+                                        <!-- Loại thức ăn -->
+                                        <div>
+                                            <label>Loại thức ăn:</label><br>
+                                            <div th:each="foodTypeOption : ${foodTypeOptions}">
+                                                <input type="checkbox" th:id="'foodType_' + ${foodTypeOption}"
+                                                       th:name="foodTypeOptions" th:value="${foodTypeOption}"/>
+                                                <label th:for="'foodType_' + ${foodTypeOption}"
+                                                       th:text="${foodTypeOption}"></label><br>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#preview').attr('src', e.target.result);
+                $('#preview').css('display', 'block');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+    function toggleAttributes() {
+var categorySelect = document.getElementById('category');
+if (!categorySelect) {
+console.error('Cannot find the category select element');
+return;
+}
+var selectedCategory = categorySelect.options[categorySelect.selectedIndex].text;
+
+var plantAttributesDiv = document.getElementById('plantAttributes');
+var fishAttributesDiv = document.getElementById('fishAttributes');
+
+if (selectedCategory === 'Cây') {
+plantAttributesDiv.style.display = 'block';
+fishAttributesDiv.style.display = 'none';
+} else if (selectedCategory === 'Cá') {
+plantAttributesDiv.style.display = 'none';
+fishAttributesDiv.style.display = 'block';
+} else {
+plantAttributesDiv.style.display = 'none';
+fishAttributesDiv.style.display = 'none';
+}
+}
+
+// Khởi tạo hiển thị khi tải trang
+document.addEventListener('DOMContentLoaded', function () {
+toggleAttributes();
+});
+</script>
+
+<div th:replace="admin/fragments/script :: script"></div>
+
+</body>
+</html>

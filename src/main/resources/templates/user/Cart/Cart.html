@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from portotheme.com/html/molla/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 19 Jan 2024 02:54:34 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+
+<head th:replace="layout/head :: head"/>
+</head>
+
+<body>
+<div class="page-wrapper">
+    <head th:replace="layout/header :: header"/>
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                </ol>
+            </div>
+        </nav>
+        <div class="page-content">
+            <div class="cart">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <table class="table table-cart table-mobile">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                                    </th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="detail, rowStat : ${cart.listCartDetail}" th:data-row-id="${rowStat.index} " th:data-cart-id="${detail.id}"
+                                    th:attr="data-product-id=${detail.product.id}">
+                                    <td class="checkbox-col">
+                                        <input type="checkbox" th:id="'checkbox-' + ${rowStat.index}"
+                                               name="selectedProducts" th:value="${detail.product.id}"
+                                               onclick="toggleRowColor(this)">
+                                    </td>
+                                    <td class="product-col">
+                                        <div class=" product">
+                                            <!-- Hình ảnh sản phẩm -->
+                                            <figure class="product-media">
+                                                <a th:href="@{/product/{id}(id=${detail.product.id})}">
+                                                    <img style = "width: 60px; height:60px"th:src="@{${detail.product.image}}" alt="Product image">
+                                                </a>
+                                            </figure>
+                                            <!-- Tên sản phẩm -->
+                                            <h3 class="product-title">
+                                                <a th:href="@{/product/{id}(id=${detail.product.id})}"
+                                                   th:text="${detail.product.name}"></a>
+                                            </h3>
+                                        </div>
+                                    </td>
+                                    <!-- Giá sản phẩm -->
+                                    <td class="price-col" th:text="${detail.product.price}"
+                                        th:attr="data-product-price=${detail.product.price}"></td>
+                                    <!-- Số lượng sản phẩm -->
+                                    <td class="quantity-col">
+                                        <div class="cart-product-quantity">
+                                            <input type="number" class="form-control" th:value="${detail.quantity}"
+                                                   min="1" max="10" step="1" data-decimals="0"
+                                                   th:attr="data-row-id=${rowStat.index}" onchange="updateTotalAndSave(this)"
+                                                   required>
+                                        </div>
+                                    </td>
+                                    <!-- Tổng giá sản phẩm -->
+                                    <td class="total-col">
+                                        <span class="price-col" th:text="${detail.product.price * detail.quantity}"></span>
+                                    </td>
+                                    <!-- Nút xóa sản phẩm -->
+                                    <td class="remove-col">
+                                        <form th:action="@{/user/cartdetail/remove/{productId}(productId=${detail.product.id})}"
+                                              method="post" style="display:inline;">
+                                            <button class="btn-remove" type="submit"><i class="icon-close"></i></button>
+                                        </form>
+                                    </td>
+
+
+                                </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <aside class="col-lg-5">
+                            <div class="summary summary-cart">
+                                <h3 class="summary-title">Tông giá giỏ hàng</h3>
+                                <table class="table table-summary">
+                                    <tbody>
+                                    <tr class="summary-subtotal">
+                                        <td>Tông giá sản phẩm:</td>
+                                        <td class="price-col" th:text="${#numbers.formatDecimal(cart.getTotal(), 0,0)}"></td>
+
+
+                                    </tr>
+                                    <tr class="summary-shipping">
+                                        <td>Shipping:</td>
+                                        <td>&nbsp;free</td>
+                                    </tr>
+                                    <tr class="summary-total">
+                                        <td> Thanh toán:</td>
+                                        <td class="price-col" th:text="${#numbers.formatDecimal(cart.getTotal(), 0, 0 )}"></td>
+
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <form id="cart-form" action="/user/cart/pay" method="GET"
+                                      onsubmit="submitSelectedProducts(); return false;">
+                                    <!-- Các sản phẩm đã chọn sẽ được thêm vào form -->
+                                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
+                                        TO CHECKOUT
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="layout/footer :: footer"/>
+
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container mobile-menu-light">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+                   required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab"
+                   aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="mobile-cats-link" data-toggle="tab" href="#mobile-cats-tab" role="tab"
+                   aria-controls="mobile-cats-tab" aria-selected="false">Categories</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel"
+                 aria-labelledby="mobile-menu-link">
+                <nav class="mobile-nav">
+                    <ul class="mobile-menu">
+
+
+                    </ul>
+                </nav><!-- End .mobile-nav -->
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="mobile-cats-tab" role="tabpanel" aria-labelledby="mobile-cats-link">
+                <nav class="mobile-cats-nav">
+                    <ul class="mobile-cats-menu">
+                        <li><a class="mobile-cats-lead" href="#">Daily offers</a></li>
+                        <li><a class="mobile-cats-lead" href="#">Gift Ideas</a></li>
+                        <li><a href="#">Beds</a></li>
+                        <li><a href="#">Lighting</a></li>
+                        <li><a href="#">Sofas & Sleeper sofas</a></li>
+                        <li><a href="#">Storage</a></li>
+                        <li><a href="#">Armchairs & Chaises</a></li>
+                        <li><a href="#">Decoration </a></li>
+                        <li><a href="#">Kitchen Cabinets</a></li>
+                        <li><a href="#">Coffee & Tables</a></li>
+                        <li><a href="#">Outdoor Furniture </a></li>
+                    </ul><!-- End .mobile-cats-menu -->
+                </nav><!-- End .mobile-cats-nav -->
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<!-- Sign in / Register Modal -->
+
+<script th:inline="javascript">
+
+
+    function submitSelectedProducts() {
+    const form = document.getElementById('cart-form');
+    const selectedProducts = document.querySelectorAll('input[name="selectedProducts"]:checked');
+
+    // Tạo mảng chứa ID của các sản phẩm đã chọn
+    const selectedProductIds = Array.from(selectedProducts).map(checkbox => checkbox.value);
+
+    // Thêm các sản phẩm đã chọn vào form dưới dạng tham số
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'selectedProductIds';
+    input.value = JSON.stringify(selectedProductIds);
+    form.appendChild(input);
+
+    // Gửi form
+    form.submit();
+}
+
+    function updateTotal(input) {
+        var rowId = input.getAttribute('data-row-id');
+        var price = parseFloat(input.parentNode.parentNode.querySelector('.price-col').getAttribute('data-product-price'));
+        var quantity = input.value;
+        var total = price * quantity;
+        document.querySelector('tbody tr:nth-child(' + (parseInt(rowId) + 1) + ') .total-col').textContent = total;
+    }
+<!--CHỈNH SỐ LƯỢNG SẢN PHẨM VÀ CẬP NHẬT GIÁ SẢN PHẨM-->
+function updateTotalAndSave(inputElement) {
+    const row = inputElement.closest('tr');
+    const quantity = parseInt(inputElement.value, 10);
+    const price = parseFloat(row.querySelector('.price-col').getAttribute('data-product-price'));
+    const totalElement = row.querySelector('.total-col span');
+
+    // Tính toán tổng giá
+    const total = quantity * price;
+    totalElement.textContent = total.toFixed(2);
+
+    // Lấy giá trị từ data-cart-id
+    const cartId = getCartIdFromData(row.getAttribute('data-cart-id'));
+    const productId = row.getAttribute('data-product-id');
+
+    fetch(`/user/cartdetail/update`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cartId: cartId,
+            productId: productId,
+            quantity: quantity
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+         window.location.reload();
+            console.log('Updated successfully');
+        } else {
+            console.error('Failed to update');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Hàm để phân tích chuỗi data-cart-id và lấy cartId
+function getCartIdFromData(dataCartId) {
+   const regex = /cart=([A-Z0-9]+), product='(\d+)'/;
+    const match = dataCartId.match(regex);
+    if (match) {
+        return match[1]; // Trả về giá trị của cartId
+    }
+    return null;
+}
+
+
+  function toggleRowColor(checkbox) {
+        const row = checkbox.closest('tr');
+        if (checkbox.checked) {
+            row.classList.add('checked-row');
+        } else {
+            row.classList.remove('checked-row');
+        }
+    }
+
+<!--  TÍCH TẤT CẢ SẢN PHẨM TRONG GIỎ HÀNG-->
+        function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('input[name="selectedProducts"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = source.checked;
+        });
+    }
+
+
+</script>
+
+
+<!-- Plugins JS File -->
+<div th:replace="layout/script :: script"></div>
+</body>
+</html>

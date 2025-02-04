@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Fish Attributes</a></li>
+                <li class="active">Edit</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Edit Fish Attribute</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <form th:action="@{/admin/fish-attributes/save}" th:object="${fishAttributes}" method="post">
+                                <input type="hidden" th:field="*{id}" />
+
+                                <div class="form-group">
+                                    <label for="product">Product</label>
+                                    <select id="product" th:field="*{product}" class="form-control" required>
+                                        <option value="" disabled selected>Select Product</option>
+                                        <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}" th:selected="${product.id == fishAttributes.product.id}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="species">Species</label>
+                                    <input type="text" id="species" th:field="*{species}" class="form-control" placeholder="Species" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="size">Size</label>
+                                    <input type="text" id="size" th:field="*{size}" class="form-control" placeholder="Size" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lifespan">Lifespan</label>
+                                    <input type="text" id="lifespan" th:field="*{lifespan}" class="form-control" placeholder="Lifespan" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="hardness">Hardness</label>
+                                    <input type="number" id="hardness" th:field="*{hardness}" class="form-control" placeholder="Hardness" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="foodType">Food Type</label>
+                                    <input type="text" id="foodType" th:field="*{foodType}" class="form-control" placeholder="Food Type" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a href="#" th:href="@{/admin/fish-attributes/list}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<div th:replace="admin/fragments/script :: script"></div>
+</body>
+</html>

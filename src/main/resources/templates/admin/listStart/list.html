@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<!-- Thêm các liên kết DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div th:replace="admin/fragments/header :: header"></div>
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li class="active">Danh sách sản phẩm được đánh giá</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Danh sách sản phẩm được đánh giá</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped dataTable">
+                                <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Danh mục</th>
+                                    <th>Đánh giá trung bình</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="product : ${reviewedProducts}">
+                                    <td th:text="${product.name}"></td>
+                                    <td>
+                                        <img th:src="@{${product.image}}" alt="Product Image"
+                                             style="width: 120px; height: 100px;">
+                                    </td>
+                                    <td th:text="${product.category.name}"></td>
+                                    <td>
+                                        <div class="star-rating">
+                                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                                      th:classappend="${i <= product.averageRating ? 'star filled' : 'star'}">
+                                                    ★
+                                                </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- PHÂN TRANG -->
+                            <!-- Phân trang được xử lý bởi DataTables -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="admin/fragments/footer :: footer"></div>
+</div>
+
+<!-- Thêm script DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#example1').DataTable({
+            "paging": true,  // Kích hoạt phân trang
+            "searching": true, // Kích hoạt tìm kiếm
+            "info": true, // Hiển thị thông tin
+            "pageLength": 6 // Số lượng hàng trên mỗi trang
+        });
+    });
+</script>
+
+<style>
+    .star-rating {
+        font-size: 1.5em;
+        color: #FFD700;
+    }
+    .star {
+        display: inline-block;
+    }
+    .star.filled {
+        color: #FFD700;
+    }
+    .star:not(.filled) {
+        color: #ddd;
+    }
+</style>
+</body>
+</html>
